@@ -1,5 +1,5 @@
-# THUPC2022-Final
-THUPC 2022年决赛 数据 &amp; 题面 &amp; 配置文件
+# THUPC2023-Pre
+THUPC 2023 年初赛 数据 &amp; 题面 &amp; 配置文件
 
 ## 题目使用协议
 
