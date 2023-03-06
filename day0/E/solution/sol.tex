@@ -1,0 +1,55 @@
+\documentclass{beamer}
+
+\usepackage[UTF8,noindent]{ctexcap}
+\usepackage{color}%引入颜色
+\usetheme{Berlin}
+\usecolortheme{spruce}
+\usepackage{graphicx}%引入插图
+\usepackage{ulem}%删除线
+\usepackage{tikz}
+\usepackage{amsmath}
+\usefonttheme[onlymath]{serif}
+
+\setbeamertemplate{theorems}[numbered]
+
+\title{THUPC2022 速战速决}
+\author{Itst}
+\institute{THU\ IIIS}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\section{简要题意}
+\begin{frame}{简要题意}
+	$n$ 种牌，每种牌各两张，双方初始获得 $n$ 张手牌。双方轮流在栈里面放牌，当栈里有两张相同的牌时，这两张牌及其中间的牌从栈中移动到放牌的人的手牌里。谁没手牌谁就输了。
+
+	后手的策略为一个队列，每次一定出队头，获得的手牌放在队尾，初始手牌的出牌顺序给定。先手可以任意出牌，求先手的最小操作次数策略使得先手胜利。
+
+	$n \le 3 \times 10^5$。
+
+	~\\
+
+	Bonus：先手获得的手牌数小于后手？
+\end{frame}
+\section{解法}
+\begin{frame}{分析}
+	操作次数的下界显然是 $n$，而这要求后手吃不到牌。因此我们先考虑怎样才能让后手永远吃不到牌。\pause
+
+	重要的观察是，当栈底那张牌的另一张在后手手上，那么 TA 肯定会吃到这张牌，因为你的策略无法撼动这张牌在栈底的地位。\pause
+
+	类似地，当栈底那张牌的另一张在先手手上，那么场面对先手来说是非常有利的，因为在任意先手的操作时刻，先手都可以选择打出这一张牌将场面清空。为了有效控场，这张王牌必然是越晚用越好。
+\end{frame}
+\begin{frame}{分析}
+	这样，在初始手牌有对子时，容易得到一个策略：初始放入手上的一个对子中的一张，而每当先手发现后手可以吃到牌的时候就把栈清空，否则放入任意的其他牌。\pause
+
+	此时由两个事实可以说明这个策略总是可以让后手吃不到牌：\begin{itemize}
+		\item 先手清空后，后手放入的落在栈底的牌在原来的栈中，所以也就在先手的手牌里。所以先手可以一直保持对整个栈的控制；
+		\item 先手不想清空时，由于双方初始手牌数相等且后手永远吃不到牌，先手总是能找到不是栈底的牌打出去。
+	\end{itemize}
+\end{frame}
+\begin{frame}{分析}
+	以上策略要求初始手牌中至少有一个对子，没有考虑先手恰好有 $n$ 种不同的牌的情况。
+	
+	这个情况下，栈底的牌总是会被后手吃，因此最小操作数至少是 $n+2$，而构造到 $n+2$ 是简单的：设后手队列为 $1,2,3,\cdots,n$，则按照 $n,1,2,\cdots,n-1$ 顺序打出手牌，最后对手手上就只有一对 $n$。
+\end{frame}
+\end{document}

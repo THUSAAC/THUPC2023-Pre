@@ -1,0 +1,115 @@
+\documentclass{beamer}
+
+\usepackage[UTF8,noindent]{ctexcap}
+\usepackage{color}%引入颜色
+\usetheme{Berlin}
+\usecolortheme{spruce}
+\usepackage{graphicx}%引入插图
+\usepackage{ulem}%删除线
+\usepackage{tikz}
+\usepackage{amsmath}
+\usefonttheme[onlymath]{serif}
+
+\setbeamertemplate{theorems}[numbered]
+
+\title{THUPC2022 快速最小公倍数变换}
+\author{Itst}
+\institute{THU\ IIIS}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\section{简要题意}
+\begin{frame}{简要题意}
+	给定 $n$ 个数 $a_1,a_2,\cdots,a_n$，选择两个数删掉并将它们的和加入，求所有的方案的最小公倍数的和，对 $998244353$ 取模。
+
+	$n \le 5 \times 10^5, 1 \le a_i \le 10^6$
+\end{frame}
+\section{解法}
+\begin{frame}{定义}
+	对于正整数 $A$ 和素数 $p$，定义 $v_p(A)$ 为 $A$ 的唯一质因子分解中 $p$ 的出现次数。因此 $p^{v_p(A)} \mid A$ 而 $p^{v_p(A)+1} \nmid A$。
+
+	定义 $M(p)$ 和 $m(p)$ 为 $\{v_p(a_1),\cdots,v_p(a_n)\}$ 中的最大值和非严格次大值，即当最大值出现超过一次时，$m(p) = M(p)$。\pause
+
+	那么 $\prod_{p \in \texttt{Prime}} p^{M(p)}$ 就是整个序列的最小公倍数。接下来删掉两个数并加上一个数时，可以仅考虑 $M(p)$ 的变化量。
+\end{frame}
+\begin{frame}{观察}
+	删除 $a_i$ 和 $a_j$ 并加入 $a_i+a_j$ 时，我们期待 $M(p)$ 的变化可以由 \begin{itemize}
+		\item 仅和 $a_i$ 相关的量；
+		\item 仅和 $a_j$ 相关的量；
+		\item 仅和 $a_i+a_j$ 相关的量
+	\end{itemize}
+	这三部分刻画，这样贡献的独立性更方便我们进行卷积操作。
+\end{frame}
+\begin{frame}{定理}
+	\begin{theorem}
+		对于任意 $a_i$ 和 $a_j$，设将 $a_i$ 和 $a_j$ 删去并加入 $a_i+a_j$ 后整个序列的最小公倍数中 $p$ 的指数的变化量为 $\Delta M_p(a_i,a_j)$，则 \begin{align*}
+			\Delta M_p(a_i,a_j) = & [M(p) = v_p(a_i)](m(p) - M(p)) \\
+			 + & [M(p) = v_p(a_j)](m(p) - M(p)) \\ 
+			 + & \max(v_p(a_i+a_j) - M(p) , 0).
+		\end{align*}
+	\end{theorem}\pause
+	也就是说，$\Delta M_p(a_i,a_j)$ 直接由删去 $a_i$ 造成的指数减小、删去 $a_j$ 造成的指数减小和加入 $a_i+a_j$ 造成的指数增大三部分贡献。这三部分贡献的基准都是 $M(p)$，这是非常反直觉的，而在删除超过两个数时类似结论不成立。
+\end{frame}
+\begin{frame}{证明}
+	\begin{align*}
+		\Delta M_p(a_i,a_j) = & [M(p) = v_p(a_i)](m(p) - M(p)) \\
+		 + & [M(p) = v_p(a_j)](m(p) - M(p)) \\ 
+		 + & \max(v_p(a_i+a_j) - M(p) , 0).
+	\end{align*}
+	
+	~\\
+	
+	定义 $f_i = [M(p) = v_p(a_i)] , f_j = [M(p) = v_p(a_j)] , f_k = [v_p(a_i+a_j) \ge M(p)] , f_l = [m(p) = M(p)]$。分类讨论：
+
+	~\\
+	
+	\begin{itemize}
+		\item $f_i=f_j= 0$：上式显然成立。
+	\end{itemize}
+\end{frame}
+\begin{frame}{证明}
+	\begin{align*}
+		\Delta M_p(a_i,a_j) = & [M(p) = v_p(a_i)](m(p) - M(p)) \\
+		 + & [M(p) = v_p(a_j)](m(p) - M(p)) \\ 
+		 + & \max(v_p(a_i+a_j) - M(p) , 0).
+	\end{align*}
+	
+	~\\
+	
+	定义 $f_i = [M(p) = v_p(a_i)] , f_j = [M(p) = v_p(a_j)] , f_k = [v_p(a_i+a_j) \ge M(p)]$。分类讨论：
+	
+	~\\
+
+	\begin{itemize}
+		\item $f_i = 1, f_j = 0$：此时 $v_p(a_i) = M(p) > v_p(a_j)$，故 $v_p(a_i+a_j) = v_p(a_j)$，$\{v_p(a_i)\}$ 集合只删掉了一个最大值。因此 $f_k = 0$ 且 $\Delta M_p(a_i, a_j) = (m(p) - M(p))$，与上式相符。
+	\end{itemize}
+\end{frame}
+\begin{frame}{证明}
+	\begin{align*}
+		\Delta M_p(a_i,a_j) = & [M(p) = v_p(a_i)](m(p) - M(p)) \\
+		 + & [M(p) = v_p(a_j)](m(p) - M(p)) \\ 
+		 + & \max(v_p(a_i+a_j) - M(p) , 0).
+	\end{align*}
+	
+	~\\
+	
+	定义 $f_i = [M(p) = v_p(a_i)] , f_j = [M(p) = v_p(a_j)] , f_k = [v_p(a_i+a_j) \ge M(p)] , f_l = [m(p) = M(p)]$。分类讨论：
+	
+	~\\
+
+	\begin{itemize}
+		\item $f_i = f_j = 1$：此时 $m(p) = M(p)$，且 $v_p(a_i+a_j) \ge M(p)$。因此 $f_k = 1$ 且 $\Delta M_p(a_i, a_j) = v_p(a_i+a_j) - M(p)$，与上式相符。
+	\end{itemize}
+\end{frame}
+\begin{frame}{解法}
+	由此，设 $$f(i) = \prod_{p \in \texttt{Prime}} p^{[M(p) = v_p(i)](m(p) - M(p))},$$ $$g(j) = \prod_{p \in \texttt{Prime}} p^{\max(v_p(j) - M(p) , 0)},$$则答案为 $$\sum_{1 \le i < j \le n} f(a_i)f(a_j)g(a_i+a_j).$$
+\end{frame}
+\begin{frame}{解法}
+	此时对值域维度卷积的方法较为显然。定义 
+	$$F(x) = \sum_{i=1}^n f(a_i) x^{a_i},$$ 则有 $$[x^p]F^2(x) = \sum_{1 \le i,j \le n} f(a_i)f(a_j)[a_i+a_j = p].$$
+	计算 $\frac{1}{2} \left(F^2(x) \cdot \sum_{i \ge 0} g(i) x^i \right)$ 并去除 $i=j$ 的多余贡献即可。
+
+	使用 $O(\max a_i) - O(\log \max a_i)$ 分解质因数方法，复杂度 $O((n + \max a_i) \log (\max a_i))$。
+\end{frame}
+\end{document}

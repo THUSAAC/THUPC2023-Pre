@@ -1,0 +1,28 @@
+args:
+  T: 100
+  n: 100
+compile:
+  c: -O2 -std=c11
+  cpp: -O2 -std=c++14
+  java: ''
+  pas: -O2
+  py: ''
+data:
+  - cases: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
+folder: problem
+memory limit: 1024 MiB
+name: I
+partial score: false
+pre: []
+samples:
+  - cases: [1, 2]
+time limit: 5.0
+title:
+  zh-cn: 乱西星上的空战
+type: program
+users:
+  ckw:
+    std: {expected: == 100, path: ckw/std.cpp}
+  zyb:
+    std: {expected: == 100, path: zyb/i.cpp}
+version: 2

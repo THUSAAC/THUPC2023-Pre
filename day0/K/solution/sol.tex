@@ -1,0 +1,40 @@
+\documentclass{beamer}
+
+\usepackage[UTF8,noindent]{ctexcap}
+\usepackage{color}%引入颜色
+\usetheme{Berlin}
+\usecolortheme{spruce}
+\usepackage{graphicx}%引入插图
+\usepackage{ulem}%删除线
+\usepackage{tikz}
+\usepackage{amsmath}
+\usefonttheme[onlymath]{serif}
+
+\setbeamertemplate{theorems}[numbered]
+
+\title{THUPC2022 众数}
+\author{Itst}
+\institute{THU\ IIIS}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\section{简要题意}
+\begin{frame}{简要题意}
+	找到一个序列，其中有 $a_i$ 个 $i(1 \le i \le n)$，且前缀众数和尽可能大。
+
+	$1 \le a_i,n \le 10^5$
+\end{frame}
+\section{解法}
+\begin{frame}{解法}
+	直观的想法是，让 $n$ 在尽可能多的前缀中是众数，其次让 $n-1$ 在尽可能多的前缀中是众数，以此类推。
+
+	那么一个很显然的贪心是，先放 $a_n$ 个 $n$，然后把其他数放到 $\min(a_n,a_i)$ 个；然后再放 $a_{n-1}$，再把其他数放到 $\min(\max(a_n,a_{n-1}),a_i)$ 个，以此类推。\pause
+
+	如上直接做是平方的。上面的贪心策略实际上跟这样的贪心策略是等价的：先从大到小将每个数的第一次出现放入序列，然后将它们的第二次出现放入序列，以此类推。
+
+	故可以枚举这个第几次出现，然后用最大值乘元素个数贡献答案。用 set 维护，复杂度 $\tilde{O}(\max a_i + n)$。\pause 
+
+	如上贪心算法的正确性证明，可以考虑众数 $\ge i$ 的前缀个数最多为多少，并发现如上构造方法达到了该上界。
+\end{frame}
+\end{document}

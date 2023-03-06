@@ -1,0 +1,28 @@
+args:
+  n: 1000
+compile:
+  c: -O2 -std=c11
+  cpp: -O2 -std=c++14
+  java: ''
+  pas: -O2
+  py: ''
+data:
+  - cases: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42]
+    score: 100
+folder: problem
+memory limit: 512 MiB
+name: F
+partial score: false
+samples:
+  - cases: [1, 2, 3]
+time limit: 1.0
+title:
+  zh-cn: 公平合作
+type: program
+users:
+  chj:
+    std: {expected: == 100, path: ScarletStorm/std.cpp}
+    faster_std: {expected: == 100, path: ScarletStorm/std2.cpp}
+  nealchen:
+    nealchen: {expected: == 100, path: nealchen/nealchen.cpp}
+version: 2

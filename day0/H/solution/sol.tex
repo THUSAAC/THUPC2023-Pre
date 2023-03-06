@@ -1,0 +1,50 @@
+\documentclass{beamer}
+
+\usepackage[UTF8,noindent]{ctexcap}
+\usepackage{color}%引入颜色
+\usetheme{Berlin}
+\usecolortheme{spruce}
+\usepackage{graphicx}%引入插图
+\usepackage{ulem}%删除线
+\usepackage{tikz}
+\usepackage{amsmath}
+\usefonttheme[onlymath]{serif}
+
+\setbeamertemplate{theorems}[numbered]
+
+\title{THUPC2022 背包}
+\author{Itst}
+\institute{THU\ IIIS}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+\section{简要题意}
+\begin{frame}{简要题意}
+	有 $n$ 种物品，第 $i$ 种物品单个体积为 $v_i$、价值为 $c_i$。
+
+	$q$ 次询问，每次给出背包的容积 $V$，你需要选择若干个物品，每种物品可以选择任意多个（也可以不选），在选出物品的体积的和恰好为 $V$ 的前提下最大化选出物品的价值的和。
+
+	$1 \le n \le 50$，$1 \le v_i \le 10^5$，$1 \le c_i \le 10^6$，$1 \le q \le 10^5$，$10^{11} \le V \le 10^{12}$。
+\end{frame}
+\section{解法}
+\begin{frame}{解法}
+	$V$ 很大，一个很直观的想法是：大部分选 $\frac{c_i}{v_i}$ 最大的物品，边角用其他物品填满。我们先假设 $V$ 非常非常非常大并考察一个解法，再证明题目中 $V$ 的下界保证了该算法的正确性。\pause
+
+	设 $(c_0,v_0)$ 为 $\frac{c_i}{v_i}$ 最大的物品的参数。根据 $\bmod\ v_0$ 的不同，边角有不同方案，而 $V$ 足够大时，$\bmod\ v_0$ 相同的询问的边角选择方案总会相同。因此计算出每种边角的最优方案即可 $O(1)$ 得到答案。
+\end{frame}
+\begin{frame}{解法}
+	为此，设 $f_i$ 为最优物品以外的物品的完全背包数组，并设 $g_i = \max_{k \ge 0} f_{i + kv_0} - kc_0$。那么 $\bmod b_0 = i$ 的边角最优方案的收益就是 $g_i$。注意每当 $k$ 增大 $1$ 时会占用一个最优物品所以需要减掉一个 $c_0$。\pause
+
+	沿用完全背包的 dp 思路计算 $g_i$。加入一个 $(c_i,v_i)$，转移为 $$g_{(j + v_i) \bmod v_0} \leftarrow \max\left(g_{(j + v_i) \bmod v_0} , g_j + c_i - \lfloor \frac{j + v_i}{v_0} \rfloor c_0\right).$$\pause
+	
+	注意到转移成环，但由于 $(c_0,v_0)$ 的最优性，转移不可能无限进行，所以 dp 规则是良定义的。转移构成若干个圈，沿着每个圈转移两次即可计算出正确的 dp 值。
+
+	以上算法复杂度 $O(q + n \max v_i)$。
+\end{frame}
+\begin{frame}{正确性证明}
+	我们还需要证明 $V$ 确实足够大，也就是说 $g_i$ 对应的方案的容积不超过 $V$ 的下界。
+
+	注意到上面的动态规划也可以视为最短路，根据最短路不重复经过单点的性质，每个 $g_i$ 对应的方案都一定有不超过 $v_0$ 个物品，所以总容积不超过 $\max v_i^2 = 10^{10}$，因此在本题设定下该算法是正确的。
+\end{frame}
+\end{document}

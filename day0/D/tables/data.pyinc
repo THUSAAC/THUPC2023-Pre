@@ -1,0 +1,9 @@
+ret = [["测试点编号", " $n,m\\leq $ ", "特殊条件"]]
+ret.append([" $1\\sim 4$ ", " $5000$ ", "无"])
+ret.append([" $5\\sim 8$ ", " $2 \\times 10^5$ ", "只有事件 $4$ "])
+ret.append([" $9\\sim 12$ ", " $2 \\times 10^5$ ", "只有事件 $2,4$ "])
+ret.append([" $13\\sim 15$ ", " $2 \\times 10^5$ ", "只有事件 $2,3,4$ ，且事件 $3$ 保证 $u=v$ "])
+ret.append([" $16\\sim 18$ ", " $2 \\times 10^5$ ", "保证树的形态始终为一条链，且事件 $3$ 保证 $u=v$  "])
+ret.append([" $19\\sim 21$ ", " $2 \\times 10^5$ ", "保证树的形态始终为一条链"])
+ret.append([" $22\\sim 25$ ", " $2 \\times 10^5$ ", "无"])
+return merge_ver(ret)
